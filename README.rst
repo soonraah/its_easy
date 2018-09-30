@@ -1,9 +1,9 @@
 its_easy
 ========
 
-.. image:: https://travis-ci.org/borntyping/cookiecutter-pypackage-minimal.png
-   :target: https://travis-ci.org/borntyping/cookiecutter-pypackage-minimal
-   :alt: Latest Travis CI build status
+.. image:: https://circleci.com/gh/soonraah/its_easy.svg?style=svg
+   :target: https://circleci.com/gh/soonraah/its_easy
+   :alt: Latest CircleCI build status
 
 A Python package to make ITS tour procedure easy.
 
