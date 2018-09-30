@@ -11,6 +11,10 @@ pyyaml = "*"
 
 [dev-packages]
 pytest = "*"
+jupyter = "*"
+prompt-toolkit = "==2.0.4"
+requests = "*"
+"pdf2image" = "*"
 
 [requires]
 python_version = "3.6"
