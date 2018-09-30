@@ -32,7 +32,7 @@ jobs:
           command: |
             sudo pip install --upgrade pip
             sudo pip install pipenv
-            pipenv install --dev
+            pipenv install --dev --skip-lock
 
       - save_cache:
           paths:
