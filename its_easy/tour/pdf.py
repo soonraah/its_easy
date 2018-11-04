@@ -70,6 +70,30 @@ BOOKING_DATA_SCHEMA = {
             }
 
         }
+    },
+    '請求書・旅行書類送付先': {
+        'type': 'dict',
+        'required': True,
+        'schema': {
+            '請求書送付先住所': {
+                'type': 'dict',
+                'required': True,
+                'schema': {
+                    '種別': {'type': 'string', 'required': True, 'allowed': ['自宅', '勤務先']},
+                    '郵便番号': {'type': 'string', 'required': True, 'regex': r'^\d{3}-\d{4}$'},
+                    '住所': {'type': 'string', 'required': True}
+                }
+            },
+            '旅行書類等送付先住所': {
+                'type': 'dict',
+                'required': True,
+                'schema': {
+                    '種別': {'type': 'string', 'required': True, 'allowed': ['自宅', '勤務先']},
+                    '郵便番号': {'type': 'string', 'required': True, 'regex': r'^\d{3}-\d{4}$'},
+                    '住所': {'type': 'string', 'required': True}
+                }
+            }
+        }
     }
 }
 
@@ -110,6 +134,24 @@ BOOKING_DATA_POSITIONS = {
                 }
             }
         ]
+    },
+    '請求書・旅行書類送付先': {
+        '請求書送付先住所': {
+            '種別': {
+                '自宅': DrawingPosition(144, 606, 16),
+                '勤務先': DrawingPosition(177, 606, 16)
+            },
+            '郵便番号': DrawingPosition(217, 609, 8, 2),
+            '住所': DrawingPosition(266, 609, 8)
+        },
+        '旅行書類等送付先住所': {
+            '種別': {
+                '自宅': DrawingPosition(144, 585, 16),
+                '勤務先': DrawingPosition(177, 585, 16)
+            },
+            '郵便番号': DrawingPosition(217, 589, 8, 2),
+            '住所': DrawingPosition(266, 589, 8)
+        }
     }
 }
 
@@ -162,6 +204,15 @@ def booking_data_dict_to_texts(booking_data: dict) -> List[TextOnPage]:
     ret += create_texts(booking_data, ['利用代表者', '連絡先電話番号', 0, '種別'], generate_selection_creator(['携帯', '自宅', '勤務先']))
     ret += create_texts(booking_data, ['利用代表者', '連絡先電話番号', 1, '番号'], create_phone_number_text)
     ret += create_texts(booking_data, ['利用代表者', '連絡先電話番号', 1, '種別'], generate_selection_creator(['携帯', '自宅', '勤務先']))
+
+    # 請求書・旅行書類送付先
+    ret += create_texts(booking_data, ['請求書・旅行書類送付先', '請求書送付先住所', '種別'], generate_selection_creator(['自宅', '勤務先']))
+    ret += create_texts(booking_data, ['請求書・旅行書類送付先', '請求書送付先住所', '郵便番号'])
+    ret += create_texts(booking_data, ['請求書・旅行書類送付先', '請求書送付先住所', '住所'])
+    ret += create_texts(booking_data, ['請求書・旅行書類送付先', '旅行書類等送付先住所', '種別'], generate_selection_creator(['自宅', '勤務先']))
+    ret += create_texts(booking_data, ['請求書・旅行書類送付先', '旅行書類等送付先住所', '郵便番号'])
+    ret += create_texts(booking_data, ['請求書・旅行書類送付先', '旅行書類等送付先住所', '住所'])
+
 
     return ret
 
@@ -270,6 +321,18 @@ if __name__ == '__main__':
                 {'番号': '090-1234-5678', '種別': '携帯'},
                 {'番号': '0123-45-6789', '種別': '自宅'}
             ]
+        },
+        '請求書・旅行書類送付先': {
+            '請求書送付先住所': {
+                '種別': '自宅',
+                '郵便番号': '123-4567',
+                '住所': '東京都港区○△□1-2-3'
+            },
+            '旅行書類等送付先住所': {
+                '種別': '勤務先',
+                '郵便番号': '345-6789',
+                '住所': '東京都港区○△□4-5-6'
+            }
         }
     }
 
