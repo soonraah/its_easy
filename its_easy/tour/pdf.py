@@ -26,6 +26,19 @@ class DrawingPosition:
         return 'DrawingPosition(x={}, y={}, font_size={}, char_space={})'\
             .format(self.x, self.y, self.font_size, self.char_space)
 
+    @staticmethod
+    def is_drawable() -> bool:
+        return True
+
+
+class NoPosition(DrawingPosition):
+    def __init__(self):
+        super().__init__(-1, -1, -1)
+
+    @staticmethod
+    def is_drawable() -> bool:
+        return False
+
 
 class TextOnPage:
     def __init__(self, text: str, position: DrawingPosition):
@@ -94,6 +107,64 @@ BOOKING_DATA_SCHEMA = {
                 }
             }
         }
+    },
+    '利用希望コース': {
+        'type': 'dict',
+        'required': True,
+        'schema': {
+            '旅行期間': {
+                'type': 'dict',
+                'required': True,
+                'schema': {
+                    '開始日': {'type': 'date', 'required': True},
+                    '終了日': {'type': 'date', 'required': True}
+                }
+            },
+            'ツアーコード': {'type': 'string', 'required': True},
+            'ツアー名': {'type': 'string', 'required': True},
+            'パンフレット名／頁': {'type': 'string', 'default': ''},
+            '利用ホテル': {
+                'type': 'list',
+                'required': True,
+                'minlength': 1,
+                'maxlength': 3,
+                'schema': {
+                    'type': 'dict',
+                    'required': True,
+                    'schema': {
+                        '宿泊開始日': {'type': 'date', 'required': True},
+                        '泊数': {'type': 'integer', 'required': True},
+                        'ホテル名': {'type': 'string', 'required': True},
+                        '食事': {'type': 'string', 'required': True, 'allowed': ['朝食', '朝夕食', '食事なし']},
+                        'タバコ': {'type': 'string', 'default': 'どちらでも', 'allowed': ['禁煙', '喫煙', 'どちらでも']}
+                    }
+                }
+            },
+            '参加人数': {
+                'type': 'dict',
+                'required': True,
+                'schema': {
+                    '大人': {'type': 'integer', 'default': 1},
+                    '子供': {'type': 'integer', 'default': 0},
+                    '幼児': {'type': 'integer', 'default': 0}
+                }
+            },
+            # 'ホテル部屋割り': {
+            #     'type': 'list',
+            #     'required': True,
+            #     'minlength': 1,
+            #     'maxlength': 3,
+            #     'schema': {
+            #         '人数': {'type': 'integer', 'required': True},
+            #         '部屋数': {'type': 'integer', 'required': True},
+            #         '1人あたり旅行代金': {
+            #             '大人': {'type': 'integer'},
+            #             '子供': {'type': 'integer'},
+            #             '幼児': {'type': 'integer'}
+            #         }
+            #     }
+            # }
+        }
     }
 }
 
@@ -152,7 +223,88 @@ BOOKING_DATA_POSITIONS = {
             '郵便番号': DrawingPosition(217, 589, 8, 2),
             '住所': DrawingPosition(266, 589, 8)
         }
-    }
+    },
+    '利用希望コース': {
+        '旅行期間': {
+            '開始日': {
+                'year': DrawingPosition(87, 556, 10),
+                'month': DrawingPosition(135, 556, 10),
+                'day': DrawingPosition(170, 556, 10),
+                'dow': DrawingPosition(204, 556, 10)
+            },
+            '終了日': {
+                'year': DrawingPosition(242, 556, 10),
+                'month': DrawingPosition(290, 556, 10),
+                'day': DrawingPosition(322, 556, 10),
+                'dow': DrawingPosition(355, 556, 10)
+            }
+        },
+        'ツアーコード': DrawingPosition(445, 556, 10, 2),
+        'ツアー名': DrawingPosition(87, 536, 10),
+        'パンフレット名／頁': DrawingPosition(440, 536, 10),
+        '利用ホテル': [
+            {
+                '宿泊開始日': {
+                    'month': DrawingPosition(85, 516, 9),
+                    'day': DrawingPosition(108, 516, 9),
+                },
+                '泊数': DrawingPosition(143, 516, 9),
+                'ホテル名': DrawingPosition(81, 501, 9),
+                '食事': {
+                    '朝食': DrawingPosition(83, 481, 16),
+                    '朝夕食': DrawingPosition(114, 481, 16),
+                    '食事なし': DrawingPosition(154, 481, 16)
+                },
+                'タバコ': {
+                    '禁煙': DrawingPosition(192, 481, 16),
+                    '喫煙': DrawingPosition(217, 481, 16),
+                    'どちらでも': NoPosition()
+                }
+            },
+            {
+                '宿泊開始日': {
+                    'month': DrawingPosition(249, 516, 9),
+                    'day': DrawingPosition(272, 516, 9),
+                },
+                '泊数': DrawingPosition(307, 516, 9),
+                'ホテル名': DrawingPosition(245, 501, 9),
+                '食事': {
+                    '朝食': DrawingPosition(251, 481, 16),
+                    '朝夕食': DrawingPosition(283, 481, 16),
+                    '食事なし': DrawingPosition(318, 481, 16)
+                },
+                'タバコ': {
+                    '禁煙': DrawingPosition(361, 481, 16),
+                    '喫煙': DrawingPosition(386, 481, 16),
+                    'どちらでも': NoPosition()
+                }
+            },
+            {
+                '宿泊開始日': {
+                    'month': DrawingPosition(415, 516, 9),
+                    'day': DrawingPosition(438, 516, 9),
+                },
+                '泊数': DrawingPosition(473, 516, 9),
+                'ホテル名': DrawingPosition(412, 501, 9),
+                '食事': {
+                    '朝食': DrawingPosition(415, 481, 16),
+                    '朝夕食': DrawingPosition(448, 481, 16),
+                    '食事なし': DrawingPosition(488, 481, 16)
+                },
+                'タバコ': {
+                    '禁煙': DrawingPosition(526, 481, 16),
+                    '喫煙': DrawingPosition(551, 481, 16),
+                    'どちらでも': NoPosition()
+                }
+            }
+        ],
+        '参加人数': {
+            '大人': DrawingPosition(125, 450, 10),
+            '子供': DrawingPosition(125, 436, 10),
+            '幼児': DrawingPosition(125, 421, 10)
+        },
+
+    },
 }
 
 
@@ -213,6 +365,21 @@ def booking_data_dict_to_texts(booking_data: dict) -> List[TextOnPage]:
     ret += create_texts(booking_data, ['請求書・旅行書類送付先', '旅行書類等送付先住所', '郵便番号'])
     ret += create_texts(booking_data, ['請求書・旅行書類送付先', '旅行書類等送付先住所', '住所'])
 
+    # 利用希望コース
+    ret += create_texts(booking_data, ['利用希望コース', '旅行期間', '開始日'], create_duration_text)
+    ret += create_texts(booking_data, ['利用希望コース', '旅行期間', '終了日'], create_duration_text)
+    ret += create_texts(booking_data, ['利用希望コース', 'ツアーコード'])
+    ret += create_texts(booking_data, ['利用希望コース', 'ツアー名'])
+    ret += create_texts(booking_data, ['利用希望コース', 'パンフレット名／頁'])
+    for i in range(len(booking_data['利用希望コース']['利用ホテル'])):
+        ret += create_texts(booking_data, ['利用希望コース', '利用ホテル', i, '宿泊開始日'], create_hotel_date_text)
+        ret += create_texts(booking_data, ['利用希望コース', '利用ホテル', i, '泊数'])
+        ret += create_texts(booking_data, ['利用希望コース', '利用ホテル', i, 'ホテル名'])
+        ret += create_texts(booking_data, ['利用希望コース', '利用ホテル', i, '食事'], generate_selection_creator(['朝食', '朝夕食', '食事なし']))
+        ret += create_texts(booking_data, ['利用希望コース', '利用ホテル', i, 'タバコ'], generate_selection_creator(['禁煙', '喫煙', 'どちらでも']))
+    ret += create_texts(booking_data, ['利用希望コース', '参加人数', '大人'])
+    ret += create_texts(booking_data, ['利用希望コース', '参加人数', '子供'])
+    ret += create_texts(booking_data, ['利用希望コース', '参加人数', '幼児'])
 
     return ret
 
@@ -220,12 +387,18 @@ def booking_data_dict_to_texts(booking_data: dict) -> List[TextOnPage]:
 def get_deep_element(d: dict, keys: List[str]) -> Any:
     ret = d
     for key in keys:
-        ret = ret[key]
+        try:
+            ret = ret[key]
+        except KeyError as e:
+            print("d=" + str(d))
+            print("keys=" + str(keys))
+            raise e
     return ret
 
 
 def create_text(text: Any, position: DrawingPosition) -> List[TextOnPage]:
-    return [TextOnPage(str(text), position)]
+    t = '' if text is None else text
+    return [TextOnPage(str(t), position)]
 
 
 def create_booking_date_text(booking_date: date, positions: dict) -> List[TextOnPage]:
@@ -235,6 +408,26 @@ def create_booking_date_text(booking_date: date, positions: dict) -> List[TextOn
     ret.append(TextOnPage(str(booking_date.month), positions['month']))
     ret.append(TextOnPage(str(booking_date.day), positions['day']))
     return ret
+
+
+def date_to_dow(d: date) -> str:
+    return ['月', '火', '水', '木', '金', '土', '日'][d.weekday()]
+
+
+def create_duration_text(duration_date: date, positions: dict) -> List[TextOnPage]:
+    return [
+        TextOnPage(str(duration_date.year), positions['year']),
+        TextOnPage(str(duration_date.month), positions['month']),
+        TextOnPage(str(duration_date.day), positions['day']),
+        TextOnPage(str(date_to_dow(duration_date)), positions['dow'])
+    ]
+
+
+def create_hotel_date_text(date_to_visit: date, positions: dict) -> List[TextOnPage]:
+    return [
+        TextOnPage(str(date_to_visit.month), positions['month']),
+        TextOnPage(str(date_to_visit.day), positions['day']),
+    ]
 
 
 def generate_selection_creator(selectable_items: list) -> Callable[[str, dict], List[TextOnPage]]:
@@ -253,8 +446,8 @@ def create_phone_number_text(text: str, positions: list) -> List[TextOnPage]:
     return [TextOnPage(phone_number_parts[i], positions[i]) for i in range(0, 3)]
 
 
-def create_texts(booking_data: dict, target_keys: List[str], creator: Callable[[Any, Union[DrawingPosition, dict, list]], List[TextOnPage]] = create_text) -> List[TextOnPage]:
-    data_element = get_deep_element(booking_data, target_keys)
+def create_texts(data: dict, target_keys: List[str], creator: Callable[[Any, Union[DrawingPosition, dict, list]], List[TextOnPage]] = create_text) -> List[TextOnPage]:
+    data_element = get_deep_element(data, target_keys)
     drawing_element = get_deep_element(BOOKING_DATA_POSITIONS, target_keys)
     return creator(data_element, drawing_element)
 
@@ -287,6 +480,8 @@ def add_text_on_page(pdf_page: PageObject, texts: Iterable[TextOnPage]) -> PageO
 
     # 与えられたテキスト情報を canvas に追加していく
     for text in texts:
+        if not text.position.is_drawable():
+            continue
         text_obj = can.beginText(text.position.x, text.position.y)
         text_obj.setFont(PDF_FONT, text.position.font_size)
         text_obj.setCharSpace(text.position.char_space)
@@ -333,6 +528,67 @@ if __name__ == '__main__':
                 '郵便番号': '345-6789',
                 '住所': '東京都港区○△□4-5-6'
             }
+        },
+        '利用希望コース': {
+            '旅行期間': {
+                '開始日': date(2019, 1, 15),
+                '終了日': date(2019, 1, 18)
+            },
+            'ツアーコード': 'UX5600A',
+            'ツアー名': 'ステイ札幌2・3・4日間',
+            # 'パンフレット名／頁': 'xxx／23',
+            '利用ホテル': [
+                {
+                    '宿泊開始日': date(2019, 1, 15),
+                    '泊数': 1,
+                    'ホテル名': 'ホテルAAA',
+                    '食事': '食事なし',
+                },
+                {
+                    '宿泊開始日': date(2019, 1, 16),
+                    '泊数': 1,
+                    'ホテル名': 'ホテルBBB',
+                    '食事': '朝夕食',
+                    'タバコ': '禁煙'
+                },
+                {
+                    '宿泊開始日': date(2019, 1, 17),
+                    '泊数': 1,
+                    'ホテル名': 'ホテルCCC',
+                    '食事': '朝食',
+                    'タバコ': '喫煙'
+                }
+            ],
+            '参加人数': {
+                '大人': 3,
+                '子供': 1,
+                '幼児': 1
+            },
+            # 'ホテル部屋割り': [
+            #     {
+            #         '人数': 1,
+            #         '部屋数': 1,
+            #         '1人あたり旅行代金': {
+            #             '大人': 7500
+            #         }
+            #     },
+            #     {
+            #         '人数': 2,
+            #         '部屋数': 1,
+            #         '1人あたり旅行代金': {
+            #             '大人': 7500,
+            #             '子供': 5000
+            #         }
+            #     },
+            #     {
+            #         '人数': 2,
+            #         '部屋数': 1,
+            #         '1人あたり旅行代金': {
+            #             '大人': 7500,
+            #             '幼児': 0
+            #         }
+            #     }
+            # ]
         }
     }
 
